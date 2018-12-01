@@ -1,0 +1,6 @@
+[package]
+name = "adventofcode2018"
+version = "0.1.0"
+authors = ["Ryan Hofer <r.h.hofer@gmail.com>"]
+
+[dependencies]
