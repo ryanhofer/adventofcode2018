@@ -12,24 +12,23 @@ fn main() {
 }
 
 struct Entry {
-    year: u32,
-    month: u32,
-    day: u32,
-    hour: u32,
+    // year: u32,
+    // month: u32,
+    // day: u32,
+    // hour: u32,
     minute: u32,
     report: Report,
 }
 
 impl Entry {
     fn from_str(s: &str) -> Entry {
-        let (year, month, day, hour, minute) =
-            scan_fmt!(s, "[{}-{}-{} {}:{}]", u32, u32, u32, u32, u32);
+        let (_, _, _, _, minute) = scan_fmt!(s, "[{}-{}-{} {}:{}]", u32, u32, u32, u32, u32);
 
         Entry {
-            year: year.unwrap(),
-            month: month.unwrap(),
-            day: day.unwrap(),
-            hour: hour.unwrap(),
+            // year: year.unwrap(),
+            // month: month.unwrap(),
+            // day: day.unwrap(),
+            // hour: hour.unwrap(),
             minute: minute.unwrap(),
             report: Report::from_str(&s[19..]),
         }
