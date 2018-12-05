@@ -1,4 +1,5 @@
-#[macro_use] extern crate scan_fmt;
+#[macro_use]
+extern crate scan_fmt;
 
 const INPUT: &'static str = include_str!("input.txt");
 
@@ -31,20 +32,14 @@ impl Claim {
     fn contains(&self, x: u32, y: u32) -> bool {
         let a = self.bounds();
 
-        x >= a.x.0 &&
-        x <= a.x.1 &&
-        y >= a.y.0 &&
-        y <= a.y.1
+        x >= a.x.0 && x <= a.x.1 && y >= a.y.0 && y <= a.y.1
     }
 
     fn overlaps(&self, other: &Claim) -> bool {
         let a = self.bounds();
         let b = other.bounds();
 
-        a.x.0 <= b.x.1 &&
-        a.x.1 >= b.x.0 &&
-        a.y.0 <= b.y.1 &&
-        a.y.1 >= b.y.0
+        a.x.0 <= b.x.1 && a.x.1 >= b.x.0 && a.y.0 <= b.y.1 && a.y.1 >= b.y.0
     }
 }
 
@@ -74,8 +69,7 @@ fn part_two() -> u32 {
     let claims = parse_claims();
     let mut non_overlapping_claim_id = None;
 
-    'outer:
-    for a in claims.iter() {
+    'outer: for a in claims.iter() {
         for b in claims.iter() {
             if a.id == b.id {
                 continue;
@@ -97,12 +91,12 @@ fn parse_claims() -> Vec<Claim> {
     for s in INPUT.lines() {
         let (id, x, y, w, h) = scan_fmt!(s, "#{} @ {},{}: {}x{}", u32, u32, u32, u32, u32);
 
-        let claim = Claim{
+        let claim = Claim {
             id: id.unwrap(),
-            x:  x.unwrap(),
-            y:  y.unwrap(),
-            w:  w.unwrap(),
-            h:  h.unwrap(),
+            x: x.unwrap(),
+            y: y.unwrap(),
+            w: w.unwrap(),
+            h: h.unwrap(),
         };
 
         claims.push(claim);

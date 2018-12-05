@@ -30,8 +30,7 @@ fn part_one() -> i64 {
 fn part_two() -> String {
     let mut result = String::new();
 
-    'outer:
-    for s1 in INPUT.lines() {
+    'outer: for s1 in INPUT.lines() {
         for s2 in INPUT.lines() {
             let mut same = String::new();
             let mut diff_count = 0;
