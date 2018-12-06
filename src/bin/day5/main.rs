@@ -10,31 +10,7 @@ fn main() {
 fn part_one() -> usize {
     let mut polymer: Vec<char> = INPUT.trim().chars().collect();
 
-    loop {
-        let mut index = None;
-
-        for (i, pair) in polymer.windows(2).enumerate() {
-            let (a, b) = (pair[0], pair[1]);
-            if a.is_lowercase() == b.is_lowercase() {
-                continue;
-            }
-            if a.is_lowercase() && a == b.to_ascii_lowercase() {
-                index = Some(i);
-                break;
-            }
-            if b.is_lowercase() && b == a.to_ascii_lowercase() {
-                index = Some(i);
-                break;
-            }
-        }
-
-        if let Some(i) = index {
-            polymer.remove(i);
-            polymer.remove(i);
-        } else {
-            break;
-        }
-    }
+    perform_reaction(&mut polymer);
 
     polymer.len()
 }
@@ -62,31 +38,7 @@ fn part_two() -> usize {
             .filter(|c| u != c.to_ascii_lowercase())
             .collect();
 
-        loop {
-            let mut index = None;
-
-            for (i, pair) in polymer.windows(2).enumerate() {
-                let (a, b) = (pair[0], pair[1]);
-                if a.is_lowercase() == b.is_lowercase() {
-                    continue;
-                }
-                if a.is_lowercase() && a == b.to_ascii_lowercase() {
-                    index = Some(i);
-                    break;
-                }
-                if b.is_lowercase() && b == a.to_ascii_lowercase() {
-                    index = Some(i);
-                    break;
-                }
-            }
-
-            if let Some(i) = index {
-                polymer.remove(i);
-                polymer.remove(i);
-            } else {
-                break;
-            }
-        }
+        perform_reaction(&mut polymer);
 
         if polymer.len() < best_length {
             best_length = polymer.len();
@@ -96,4 +48,32 @@ fn part_two() -> usize {
     }
 
     best_length
+}
+
+fn perform_reaction(polymer: &mut Vec<char>) {
+    loop {
+        let mut index = None;
+
+        for (i, pair) in polymer.windows(2).enumerate() {
+            let (a, b) = (pair[0], pair[1]);
+            if a.is_lowercase() == b.is_lowercase() {
+                continue;
+            }
+            if a.is_lowercase() && a == b.to_ascii_lowercase() {
+                index = Some(i);
+                break;
+            }
+            if b.is_lowercase() && b == a.to_ascii_lowercase() {
+                index = Some(i);
+                break;
+            }
+        }
+
+        if let Some(i) = index {
+            polymer.remove(i);
+            polymer.remove(i);
+        } else {
+            break;
+        }
+    }
 }
