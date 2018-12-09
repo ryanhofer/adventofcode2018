@@ -122,7 +122,7 @@ fn parse_entries(s: &str) -> Vec<Entry> {
     entries
 }
 
-fn parse_sleeps(entries: &Vec<Entry>) -> Vec<Sleep> {
+fn parse_sleeps(entries: &[Entry]) -> Vec<Sleep> {
     let mut sleeps = vec![];
 
     let mut guard_id = None;
@@ -150,7 +150,7 @@ fn parse_sleeps(entries: &Vec<Entry>) -> Vec<Sleep> {
     sleeps
 }
 
-fn compute_minutes_asleep_per_guard(sleeps: &Vec<Sleep>) -> HashMap<u32, u32> {
+fn compute_minutes_asleep_per_guard(sleeps: &[Sleep]) -> HashMap<u32, u32> {
     let mut result = HashMap::new();
 
     for &Sleep {
@@ -166,7 +166,7 @@ fn compute_minutes_asleep_per_guard(sleeps: &Vec<Sleep>) -> HashMap<u32, u32> {
     result
 }
 
-fn find_sleepiest_guard_id(sleeps: &Vec<Sleep>) -> u32 {
+fn find_sleepiest_guard_id(sleeps: &[Sleep]) -> u32 {
     let minutes_asleep_per_guard = compute_minutes_asleep_per_guard(sleeps);
 
     let mut result = 0;
@@ -182,7 +182,7 @@ fn find_sleepiest_guard_id(sleeps: &Vec<Sleep>) -> u32 {
     result
 }
 
-fn find_minute_most_often_asleep(guard_id: u32, sleeps: &Vec<Sleep>) -> (u32, u32) {
+fn find_minute_most_often_asleep(guard_id: u32, sleeps: &[Sleep]) -> (u32, u32) {
     let guard_sleeps = sleeps.iter().filter(|&sleep| sleep.guard_id == guard_id);
 
     let mut minute_most_often_asleep = 0;
@@ -204,7 +204,7 @@ fn find_minute_most_often_asleep(guard_id: u32, sleeps: &Vec<Sleep>) -> (u32, u3
     (minute_most_often_asleep, most_times_asleep)
 }
 
-fn find_all_guard_ids(sleeps: &Vec<Sleep>) -> HashSet<u32> {
+fn find_all_guard_ids(sleeps: &[Sleep]) -> HashSet<u32> {
     let mut guard_ids = HashSet::new();
 
     for sleep in sleeps {

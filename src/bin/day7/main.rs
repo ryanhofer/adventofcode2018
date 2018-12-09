@@ -102,7 +102,7 @@ fn parse_steps(s: &str) -> HashMap<char, Vec<char>> {
 fn find_ready(
     reqs_per_step: &HashMap<char, Vec<char>>,
     completed: &HashSet<char>,
-    jobs: &Vec<Job>,
+    jobs: &[Job],
 ) -> Vec<char> {
     let mut ready: Vec<char> = reqs_per_step
         .iter()

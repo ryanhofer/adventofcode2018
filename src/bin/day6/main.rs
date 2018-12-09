@@ -99,11 +99,11 @@ fn parse_points(s: &str) -> Vec<Point> {
     points
 }
 
-fn find_min_distance(points: &Vec<Point>, q: &Point) -> Option<i64> {
+fn find_min_distance(points: &[Point], q: &Point) -> Option<i64> {
     points.iter().map(|p| p.manhattan_distance(q)).min()
 }
 
-fn find_single_closest_point<'a>(points: &'a Vec<Point>, q: &Point) -> Option<&'a Point> {
+fn find_single_closest_point<'a>(points: &'a [Point], q: &Point) -> Option<&'a Point> {
     let closest_distance = find_min_distance(points, q).unwrap();
 
     let mut closest_points = vec![];
@@ -120,7 +120,7 @@ fn find_single_closest_point<'a>(points: &'a Vec<Point>, q: &Point) -> Option<&'
     }
 }
 
-fn within_safe_region(points: &Vec<Point>, q: &Point) -> bool {
+fn within_safe_region(points: &[Point], q: &Point) -> bool {
     let safe_distance = 10000;
     let mut total_distance = 0;
     for p in points {
