@@ -8,30 +8,22 @@ fn main() {
 }
 
 fn part_one() -> i64 {
-    let mut frequency: i64 = 0;
-    for delta in INPUT.lines().map(atoi) {
-        frequency += delta;
-    }
-
-    frequency
+    let freq_changes = INPUT.lines().map(|s| s.parse::<i64>().unwrap());
+    freq_changes.sum()
 }
 
 fn part_two() -> i64 {
-    let mut seen = HashSet::new();
+    let freq_changes = INPUT.lines().map(|s| s.parse::<i64>().unwrap());
     let mut frequency: i64 = 0;
-    seen.insert(frequency);
+    let mut seen = HashSet::new();
 
-    for delta in INPUT.lines().map(atoi).cycle() {
-        frequency += delta;
+    for freq_change in freq_changes.cycle() {
+        seen.insert(frequency);
+        frequency += freq_change;
         if seen.contains(&frequency) {
             break;
         }
-        seen.insert(frequency);
     }
 
     frequency
-}
-
-fn atoi(s: &str) -> i64 {
-    s.parse().unwrap_or(0)
 }
