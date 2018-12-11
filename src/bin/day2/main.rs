@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::collections::HashSet;
 
 const INPUT: &'static str = include_str!("input.txt");
 
@@ -8,23 +7,31 @@ fn main() {
     println!("Part Two: {}", part_two());
 }
 
-fn part_one() -> i64 {
-    let mut twos = HashSet::new();
-    let mut threes = HashSet::new();
-    for s in INPUT.lines() {
+fn part_one() -> u32 {
+    checksum(INPUT.lines())
+}
+
+fn checksum<'a, I>(ids: I) -> u32
+where
+    I: Iterator<Item = &'a str>,
+{
+    let mut num_containing_double: u32 = 0;
+    let mut num_containing_triple: u32 = 0;
+
+    for id in ids {
         let mut letter_counts = HashMap::new();
-        for c in s.chars() {
+        for c in id.chars() {
             *letter_counts.entry(c).or_insert(0) += 1;
         }
         if letter_counts.values().any(|&count| count == 2) {
-            twos.insert(s);
+            num_containing_double += 1;
         }
         if letter_counts.values().any(|&count| count == 3) {
-            threes.insert(s);
+            num_containing_triple += 1;
         }
     }
 
-    (twos.len() * threes.len()) as i64
+    num_containing_double * num_containing_triple
 }
 
 fn part_two() -> String {
