@@ -1,6 +1,8 @@
 #[macro_use]
 extern crate scan_fmt;
+extern crate adventofcode2018;
 
+use adventofcode2018::{Bounds, Point};
 use std::collections::HashMap;
 use std::collections::HashSet;
 
@@ -11,42 +13,23 @@ fn main() {
     println!("Part Two: {}", part_two());
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
-struct Point {
-    x: u32,
-    y: u32,
-}
-
-impl Point {
-    fn manhattan_distance(&self, other: &Point) -> i64 {
-        let dx = other.x as i64 - self.x as i64;
-        let dy = other.y as i64 - self.y as i64;
-
-        dx.abs() + dy.abs()
-    }
-}
-
 fn part_one() -> i32 {
     let points = parse_points(INPUT);
-
-    let x1 = points.iter().map(|p| p.x).min().unwrap();
-    let x2 = points.iter().map(|p| p.x).max().unwrap();
-    let y1 = points.iter().map(|p| p.y).min().unwrap();
-    let y2 = points.iter().map(|p| p.y).max().unwrap();
-    println!("Bounds: ({},{}) to ({},{})", x1, y1, x2, y2);
+    let Bounds(a, b) = find_bounds(&points);
+    println!("Bounds: {} to {}", a, b);
 
     let mut area_per_point = HashMap::new();
     let mut bad_points = HashSet::new();
 
-    for x in x1..=x2 {
-        for y in y1..=y2 {
+    for x in a.x..=b.x {
+        for y in a.y..b.y {
             let p = Point { x, y };
             let closest = find_single_closest_point(&points, &p);
 
             if let Some(closest) = closest {
                 *area_per_point.entry(closest).or_insert(0) += 1;
                 // if p is on the perimeter, mark q as infinite
-                if x == x1 || x == x2 || y == y1 || y == y2 {
+                if x == a.x || x == b.x || y == a.y || y == b.y {
                     bad_points.insert(closest);
                 }
             }
@@ -66,16 +49,12 @@ fn part_one() -> i32 {
 
 fn part_two() -> i32 {
     let points = parse_points(INPUT);
-
-    let x1 = points.iter().map(|p| p.x).min().unwrap();
-    let x2 = points.iter().map(|p| p.x).max().unwrap();
-    let y1 = points.iter().map(|p| p.y).min().unwrap();
-    let y2 = points.iter().map(|p| p.y).max().unwrap();
-    println!("Bounds: ({},{}) to ({},{})", x1, y1, x2, y2);
+    let Bounds(a, b) = find_bounds(&points);
+    println!("Bounds: {} to {}", a, b);
 
     let mut result = 0;
-    for x in x1..=x2 {
-        for y in y1..=y2 {
+    for x in a.x..=b.x {
+        for y in a.y..=b.y {
             let p = Point { x, y };
             if within_safe_region(&points, &p) {
                 result += 1;
@@ -86,11 +65,11 @@ fn part_two() -> i32 {
     result
 }
 
-fn parse_points(s: &str) -> Vec<Point> {
+fn parse_points(s: &str) -> Vec<Point<i32>> {
     let mut points = vec![];
 
     for line in s.lines() {
-        let (x, y) = scan_fmt!(line, "{}, {}", u32, u32);
+        let (x, y) = scan_fmt!(line, "{}, {}", i32, i32);
         let (x, y) = (x.unwrap(), y.unwrap());
         let p = Point { x, y };
         points.push(p);
@@ -99,11 +78,22 @@ fn parse_points(s: &str) -> Vec<Point> {
     points
 }
 
-fn find_min_distance(points: &[Point], q: &Point) -> Option<i64> {
+fn find_bounds(points: &[Point<i32>]) -> Bounds<i32> {
+    let x1 = points.iter().map(|p| p.x).min().unwrap();
+    let x2 = points.iter().map(|p| p.x).max().unwrap();
+    let y1 = points.iter().map(|p| p.y).min().unwrap();
+    let y2 = points.iter().map(|p| p.y).max().unwrap();
+    Bounds::new(x1, y1, x2, y2)
+}
+
+fn find_min_distance(points: &[Point<i32>], q: &Point<i32>) -> Option<i32> {
     points.iter().map(|p| p.manhattan_distance(q)).min()
 }
 
-fn find_single_closest_point<'a>(points: &'a [Point], q: &Point) -> Option<&'a Point> {
+fn find_single_closest_point<'a>(
+    points: &'a [Point<i32>],
+    q: &Point<i32>,
+) -> Option<&'a Point<i32>> {
     let closest_distance = find_min_distance(points, q).unwrap();
 
     let mut closest_points = vec![];
@@ -120,7 +110,7 @@ fn find_single_closest_point<'a>(points: &'a [Point], q: &Point) -> Option<&'a P
     }
 }
 
-fn within_safe_region(points: &[Point], q: &Point) -> bool {
+fn within_safe_region(points: &[Point<i32>], q: &Point<i32>) -> bool {
     let safe_distance = 10000;
     let mut total_distance = 0;
     for p in points {
