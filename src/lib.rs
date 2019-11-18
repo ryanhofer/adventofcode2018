@@ -25,7 +25,7 @@ where
     }
 }
 
-#[derive(Debug, Hash, Eq, PartialEq)]
+#[derive(Clone, Debug, Hash, Eq, PartialEq)]
 pub struct Point<T> {
     pub x: T,
     pub y: T,
